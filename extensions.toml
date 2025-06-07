@@ -1,0 +1,16 @@
+ id = "sqlc-snippets"
+name = "sqlc Snippets"
+version = "0.1.0"
+schema_version = 1
+authors = ["RajaSunrise <indra020204@gmail.com>"]
+description = "Sqlc and PostgreSQL snippets for Zed IDE."
+repository = "https://github.com/NarmadaWeb/sqlc-snippets-zed"
+
+
+[[snippets]]
+language = "sql"
+path = "./snippets/sql.json"
+
+[[snippets]]
+language = "yaml"
+path = "./snippets/yaml.json"
