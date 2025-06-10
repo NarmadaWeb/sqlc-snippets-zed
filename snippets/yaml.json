@@ -1,0 +1,28 @@
+{
+  "sqlc.yaml": {
+    "prefix": "sqlcconfig",
+    "body": [
+      "version: \"2\"",
+      "sql:",
+      "  - engine: \"postgresql\"",
+      "    database:",
+      "      url: \"postgres://user:pass@localhost:5432/db\"",
+      "    schema: \"schema/\"",
+      "    queries: \"query/\"",
+      "    gen:",
+      "      go:",
+      "        package: \"${1:db}\"",
+      "        out: \"${2:internal/db}\"",
+      "        sql_package: \"pgx/v5\"",
+      "        overrides:",
+      "          - db_type: \"uuid\"",
+      "            go_type: \"github.com/google/uuid.UUID\"",
+      "          - db_type: \"timestamptz\"",
+      "            go_type: \"time.Time\"",
+      "      kotlin:",
+      "        package: \"com.example.db\"",
+      "        out: \"build/generated\""
+    ],
+    "description": "sqlc configuration template"
+  }
+}
