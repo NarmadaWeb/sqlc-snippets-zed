@@ -6,7 +6,7 @@
       "SELECT * FROM ${2:users}",
       "WHERE id = $1;"
     ],
-    "description": "Get single row by ID"
+    "description": "Generates a sqlc query to fetch a single row from a table, typically by its ID."
   },
 
   "sqlc: Select Many": {
@@ -18,7 +18,7 @@
       "ORDER BY ${3:created_at} DESC",
       "LIMIT $2 OFFSET $3;"
     ],
-    "description": "Get paginated results"
+    "description": "Generates a sqlc query for paginated results, fetching multiple rows using LIMIT and OFFSET."
   },
 
   "sqlc: Insert Returning": {
@@ -32,7 +32,7 @@
       ")",
       "RETURNING id, created_at;"
     ],
-    "description": "Insert with returning columns"
+    "description": "Generates a sqlc query to insert a new row and return specified columns, such as the ID."
   },
 
   "sqlc: Update Exec": {
@@ -43,7 +43,7 @@
       "SET name = $1, email = $2, updated_at = NOW()",
       "WHERE id = $3;"
     ],
-    "description": "Update record"
+    "description": "Generates a sqlc query (:exec) for updating a record in a table without returning any rows."
   },
 
   "sqlc: Delete Exec": {
@@ -53,7 +53,7 @@
       "DELETE FROM ${2:users}",
       "WHERE id = $1;"
     ],
-    "description": "Delete record"
+    "description": "Generates a sqlc query (:exec) to delete one or more records from a table."
   },
 
   "sqlc: Batch Insert": {
@@ -65,7 +65,7 @@
       "\t$1, $2",
       ");"
     ],
-    "description": "Batch insert operation"
+    "description": "Generates a sqlc query (:batchexec) for efficiently inserting multiple rows in a single operation."
   },
 
   "sqlc: Join with Aggregation": {
@@ -81,7 +81,7 @@
       "LEFT JOIN ${3:orders} o ON u.id = o.user_id",
       "GROUP BY u.id;"
     ],
-    "description": "Join with aggregation"
+    "description": "Generates a sqlc query that joins tables and uses aggregate functions like COUNT() and SUM()."
   },
 
   "sqlc: JSONB Query": {
@@ -91,7 +91,7 @@
       "SELECT * FROM ${2:users}",
       "WHERE metadata @> $1::jsonb;"
     ],
-    "description": "Query JSONB field"
+    "description": "Generates a sqlc query to find rows where a JSONB column contains a specified JSON object."
   },
 
   "sqlc: Array Contains": {
@@ -101,7 +101,7 @@
       "SELECT * FROM ${2:posts}",
       "WHERE $1::text = ANY(tags);"
     ],
-    "description": "Query array column"
+    "description": "Generates a sqlc query to find rows where a text array column contains a specific element."
   },
 
   "sqlc: Full Text Search": {
@@ -111,7 +111,7 @@
       "SELECT * FROM ${2:documents}",
       "WHERE search_vector @@ websearch_to_tsquery('english', $1);"
     ],
-    "description": "Full-text search query"
+    "description": "Generates a sqlc query to perform a full-text search on a tsvector column."
   },
 
   "sqlc: Transaction": {
@@ -133,7 +133,7 @@
       "",
       "COMMIT;"
     ],
-    "description": "Transaction block"
+    "description": "An example SQL transaction block. Note: sqlc handles transactions in Go code; this is for raw SQL testing."
   },
 
   "PG: Create Table": {
@@ -148,13 +148,13 @@
       "",
       "COMMENT ON TABLE ${1:table_name} IS '${7:Table description}';"
     ],
-    "description": "Create table with audit columns"
+    "description": "Creates a PostgreSQL table with common columns, such as a primary key and audit timestamps."
   },
 
   "PG: Create Index": {
     "prefix": "pgidx",
     "body": "CREATE INDEX ${1:concurrently|} ${2:idx_name} ON ${3:table_name} (${4:column});",
-    "description": "Create index"
+    "description": "Creates a standard or concurrent index on a table column to improve query performance."
   },
 
   "PG: Create Enum": {
@@ -166,7 +166,7 @@
       "\t'${4:deleted}'",
       ");"
     ],
-    "description": "Create enum type"
+    "description": "Creates a custom enumeration (ENUM) type in PostgreSQL for a predefined set of values."
   },
 
   "PG: Create Function": {
@@ -179,7 +179,7 @@
       "END;",
       "$$ LANGUAGE plpgsql;"
     ],
-    "description": "Create PL/pgSQL function"
+    "description": "Creates a reusable server-side function using the PL/pgSQL language."
   },
 
   "PG: Update Trigger": {
@@ -198,7 +198,7 @@
       "\tFOR EACH ROW",
       "\tEXECUTE FUNCTION update_modified();"
     ],
-    "description": "Auto-update timestamp trigger"
+    "description": "Creates a function and trigger to automatically update an `updated_at` timestamp column on row updates."
   },
 
   "PG: CTE (With Clause)": {
@@ -211,19 +211,19 @@
       ")",
       "SELECT * FROM ${1:cte_name};"
     ],
-    "description": "Common Table Expression"
+    "description": "Creates a Common Table Expression (CTE) using the WITH clause to simplify complex queries."
   },
 
   "PG: JSONB Column": {
     "prefix": "pgjsonb",
     "body": "${1:metadata} JSONB NOT NULL DEFAULT '{}'::jsonb",
-    "description": "JSONB column with default"
+    "description": "Defines a JSONB column with a non-null constraint and a default value of an empty JSON object."
   },
 
   "PG: Array Column": {
     "prefix": "pgarray",
     "body": "${1:tags} TEXT[] NOT NULL DEFAULT '{}'",
-    "description": "Text array column"
+    "description": "Defines a text array column with a non-null constraint and a default value of an empty array."
   },
 
   "PG: Full-Text Search Setup": {
@@ -249,13 +249,13 @@
       "",
       "CREATE INDEX idx_${1:table_name}_search ON ${1:table_name} USING GIN (${2:search_vector});"
     ],
-    "description": "Full-text search setup"
+    "description": "Complete setup for Full-Text Search, including a tsvector column, trigger function, and GIN index."
   },
 
   "PG: Generate UUID": {
     "prefix": "pguuid",
     "body": "gen_random_uuid()",
-    "description": "Generate UUID v4"
+    "description": "Generates a version 4 UUID using a function from the `pgcrypto` extension."
   },
 
   "sqlc: Model Comment": {
@@ -265,37 +265,37 @@
       "COMMENT ON COLUMN ${1:table_name}.id IS 'Primary key';",
       "COMMENT ON COLUMN ${1:table_name}.created_at IS 'Creation timestamp';"
     ],
-    "description": "Add comments for sqlc model"
+    "description": "Adds comments to a table and its columns, which sqlc uses for documentation in the generated Go models."
   },
 
   "Explain Analyze": {
     "prefix": "pgexplain",
     "body": "EXPLAIN (ANALYZE, BUFFERS) ${0:query};",
-    "description": "Explain query with analyze"
+    "description": "Runs a query and displays the actual execution plan and its performance statistics."
   },
 
   "Current Timestamp": {
     "prefix": "pgnow",
     "body": "NOW()",
-    "description": "Current timestamp"
+    "description": "Gets the current timestamp with time zone (equivalent to CURRENT_TIMESTAMP)."
   },
 
   "Interval": {
     "prefix": "pginterval",
     "body": "INTERVAL '${1:1} ${2|day,week,month,year|}'",
-    "description": "Time interval"
+    "description": "Creates a time interval for date/time arithmetic, e.g., `NOW() - INTERVAL '1 day'`."
   },
 
   "JSONB Build": {
     "prefix": "pgjsonbuild",
     "body": "jsonb_build_object(${1:'key', $2})",
-    "description": "Build JSONB object"
+    "description": "Builds a JSONB object from a dynamic list of key-value pairs."
   },
 
   "Array Aggregation": {
     "prefix": "pgarrayagg",
     "body": "ARRAY_AGG(${1:column})",
-    "description": "Aggregate to array"
+    "description": "Aggregates values from multiple rows into a single PostgreSQL array using ARRAY_AGG()."
   },
 
   "sqlc v2: Named Parameters": {
@@ -309,7 +309,7 @@
       "\tupdated_at = NOW()",
       "WHERE id = @id;"
     ],
-    "description": "sqlc v2 named parameters"
+    "description": "Generates a sqlc v2 query with named parameters (@param) for better readability."
   },
 
   "sqlc v2: Batch Many": {
@@ -321,7 +321,7 @@
       "WHERE id = @id",
       "RETURNING *;"
     ],
-    "description": "sqlc v2 batch with returning"
+    "description": "Generates a sqlc v2 batch operation (:batchmany) that returns data from each affected row."
   },
 
   "sqlc v2: Custom Types": {
@@ -335,25 +335,25 @@
       ")",
       "RETURNING *;"
     ],
-    "description": "sqlc v2 with custom types"
+    "description": "Generates a sqlc v2 query demonstrating parameter casting to custom or non-standard types like JSONB."
   },
 
   "PG: Create Extension": {
     "prefix": "pgext",
     "body": "CREATE EXTENSION IF NOT EXISTS \"${1|uuid-ossp,pgcrypto,pg_trgm|}\";",
-    "description": "Create PostgreSQL extension"
+    "description": "Creates a PostgreSQL extension if it doesn't already exist to enable additional functionality."
   },
 
   "PG: Add Column": {
     "prefix": "pgaddcol",
     "body": "ALTER TABLE ${1:table_name} ADD COLUMN ${2:column_name} ${3:data_type};",
-    "description": "Add column to table"
+    "description": "Adds a new column with a specific data type to an existing table."
   },
 
   "PG: Drop Column": {
     "prefix": "pgdropcol",
     "body": "ALTER TABLE ${1:table_name} DROP COLUMN ${2:column_name};",
-    "description": "Drop column from table"
+    "description": "Drops a column from an existing table. This is a destructive and often irreversible action."
   },
 
   "PG: Row Level Security": {
@@ -365,36 +365,36 @@
       "\tFOR SELECT",
       "\tUSING (${3:user_id} = current_user_id());"
     ],
-    "description": "Row Level Security policy"
+    "description": "Enables Row Level Security (RLS) on a table and creates a basic policy for multi-tenant access."
   },
 
   "PG: Grant Permissions": {
     "prefix": "pggrant",
     "body": "GRANT ${1|SELECT,INSERT,UPDATE,DELETE|} ON ${2:table_name} TO ${3:role_name};",
-    "description": "Grant table permissions"
+    "description": "Grants specific SQL permissions (SELECT, INSERT, etc.) on a table to a database role."
   },
 
   "PG: Index on Expression": {
     "prefix": "pgexpridx",
     "body": "CREATE INDEX ${1:idx_name} ON ${2:table_name} (LOWER(${3:column}));",
-    "description": "Create index on expression"
+    "description": "Creates an index based on an expression or function, such as indexing a column in lowercase."
   },
 
   "PG: Partial Index": {
     "prefix": "pgpartialidx",
     "body": "CREATE INDEX ${1:idx_name} ON ${2:table_name} (${3:column}) WHERE ${4:condition};",
-    "description": "Create partial index"
+    "description": "Creates a partial index that only covers a subset of rows, useful for specific queries."
   },
 
   "PG: Begin Transaction": {
     "prefix": "pgbegin",
     "body": "BEGIN;\n\n${0:-- test queries}\n\nROLLBACK;",
-    "description": "Test transaction block"
+    "description": "Creates a safe transaction block for testing queries, which is set to ROLLBACK by default."
   },
 
   "PG: Explain Analyze": {
     "prefix": "pgexplain",
     "body": "EXPLAIN (ANALYZE, BUFFERS, VERBOSE) ${0:query};",
-    "description": "Detailed query analysis"
+    "description": "Displays a detailed query analysis, including buffer usage and verbose output."
   }
 }
