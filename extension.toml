@@ -1,6 +1,6 @@
 id = "sqlc-snippets"
 name = "sqlc Snippets"
-version = "0.1.0"
+version = "0.2.0"
 schema_version = 1
 authors = ["RajaSunrise <indra020204@gmail.com>"]
 description = "Sqlc and PostgreSQL snippets for Zed IDE."
